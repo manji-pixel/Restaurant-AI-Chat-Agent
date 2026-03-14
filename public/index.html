@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Restaurant AI Agent</title>
+<style>
+body{font-family:Arial;background:#0f172a;color:white}
+.container{max-width:600px;margin:auto;padding:20px}
+#chat{height:400px;overflow:auto;background:#020617;padding:10px;margin-bottom:10px}
+.msg{margin-bottom:8px}
+.user{color:#22c55e}
+.bot{color:#38bdf8}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Restaurant AI Chat</h2>
+<div id="chat"></div>
+<input id="msg" placeholder="Ask something..." style="width:80%">
+<button onclick="send()">Send</button>
+</div>
+
+<script>
+const chat=document.getElementById("chat");
+
+function add(text,cls){
+const d=document.createElement("div");
+d.className="msg "+cls;
+d.innerText=text;
+chat.appendChild(d);
+}
+
+async function send(){
+const msg=document.getElementById("msg").value;
+add(msg,"user");
+
+const r=await fetch("/chat",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({message:msg})
+});
+
+const data=await r.json();
+add(data.reply,"bot");
+}
+</script>
+</body>
+</html>
